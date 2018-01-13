@@ -13,8 +13,12 @@ import javax.sql.DataSource;
 @PropertySource("classpath:application.properties")
 public class ApplicationDataSourceSettings {
 
+    private final Environment environment;
+
     @Autowired
-    private Environment environment;
+    public ApplicationDataSourceSettings(Environment environment) {
+        this.environment = environment;
+    }
 
     @Bean
     public DataSource dataSource(){
@@ -23,6 +27,8 @@ public class ApplicationDataSourceSettings {
         dataSource.setJdbcUrl(environment.getRequiredProperty("spring.datasource.url"));
         dataSource.setUsername(environment.getRequiredProperty("spring.datasource.username"));
         dataSource.setPassword(environment.getRequiredProperty("spring.datasource.password"));
+        dataSource.setPartitionCount(3);
+        dataSource.setAcquireIncrement(5);
         return dataSource;
     }
 }
